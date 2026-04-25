@@ -1443,7 +1443,25 @@ async function loadFromJsonBin() {
     const data = await res.json();
     if (data.record && data.record.aylar) {
       Object.assign(AYLAR, data.record.aylar);
-      renderAy(aktifAy);
+      // Yeni ayların butonlarını ekle
+      const container = document.getElementById('btn-subat').parentElement;
+      const plusBtn = container.querySelector('[onclick="showYeniAyModal()"]');
+      Object.keys(AYLAR).forEach(key => {
+        if (!document.getElementById('btn-' + key)) {
+          const d = AYLAR[key];
+          const newBtn = document.createElement('button');
+          const parts = (d.label || key).split(' ');
+          const shortLabel = parts[0].substring(0,3).toUpperCase() + ' ' + (parts[1]||'26').slice(-2);
+          newBtn.id = 'btn-' + key;
+          newBtn.textContent = shortLabel;
+          newBtn.onclick = () => switchMonth(key);
+          newBtn.style.cssText = 'padding:5px 12px;border-radius:20px;border:1px solid #252A3A;background:transparent;color:#6B7A99;font-size:10px;font-weight:700;font-family:var(--font-body);cursor:pointer;letter-spacing:1px;transition:all 0.2s';
+          container.insertBefore(newBtn, plusBtn);
+        }
+      });
+      const aylar = Object.keys(AYLAR);
+      aktifAy = aylar[aylar.length - 1];
+      switchMonth(aktifAy);
       showToast('Veriler yüklendi ✓', 'success');
     }
   } catch(e) {}
