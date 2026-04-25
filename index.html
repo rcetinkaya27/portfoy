@@ -838,9 +838,23 @@
       </div>
       <div style="display:flex;gap:8px;align-items:center">
         <span style="font-size:10px;color:#6B7A99;letter-spacing:1px;text-transform:uppercase">Dönem:</span>
-        <button id="btn-subat" onclick="switchMonth('subat')" style="padding:5px 12px;border-radius:20px;border:1px solid #252A3A;background:transparent;color:#6B7A99;font-size:10px;font-weight:700;font-family:var(--font-body);cursor:pointer;letter-spacing:1px;transition:all 0.2s">ŞUB 26</button>
-        <button id="btn-mart" onclick="switchMonth('mart')" style="padding:5px 12px;border-radius:20px;border:1px solid #252A3A;background:transparent;color:#6B7A99;font-size:10px;font-weight:700;font-family:var(--font-body);cursor:pointer;letter-spacing:1px;transition:all 0.2s">MAR 26</button>
-        <button id="btn-nisan" onclick="switchMonth('nisan')" style="padding:5px 12px;border-radius:20px;border:1px solid rgba(201,168,76,0.5);background:rgba(201,168,76,0.15);color:#C9A84C;font-size:10px;font-weight:700;font-family:var(--font-body);cursor:pointer;letter-spacing:1px;transition:all 0.2s">NİS 26</button>
+        <div id="ay-btn-group" style="display:flex;gap:4px;flex-wrap:wrap;align-items:center">
+          <div id="ay-grup-subat" style="display:flex;align-items:center;gap:2px">
+            <button id="btn-subat" onclick="switchMonth('subat')" style="padding:5px 12px;border-radius:20px;border:1px solid #252A3A;background:transparent;color:#6B7A99;font-size:10px;font-weight:700;font-family:var(--font-body);cursor:pointer;letter-spacing:1px;transition:all 0.2s">ŞUB 26</button>
+            <button onclick="duzenleModu('subat')" title="Düzenle" style="padding:3px 5px;border-radius:6px;border:1px solid #1E2A3A;background:transparent;color:#3A4A6A;font-size:10px;cursor:pointer;transition:all 0.2s" onmouseover="this.style.color='#C9A84C'" onmouseout="this.style.color='#3A4A6A'">✎</button>
+            <button onclick="ayiSil('subat')" title="Sil" style="padding:3px 5px;border-radius:6px;border:1px solid #1E2A3A;background:transparent;color:#3A4A6A;font-size:10px;cursor:pointer;transition:all 0.2s" onmouseover="this.style.color='#FF4D6A'" onmouseout="this.style.color='#3A4A6A'">✕</button>
+          </div>
+          <div id="ay-grup-mart" style="display:flex;align-items:center;gap:2px">
+            <button id="btn-mart" onclick="switchMonth('mart')" style="padding:5px 12px;border-radius:20px;border:1px solid #252A3A;background:transparent;color:#6B7A99;font-size:10px;font-weight:700;font-family:var(--font-body);cursor:pointer;letter-spacing:1px;transition:all 0.2s">MAR 26</button>
+            <button onclick="duzenleModu('mart')" title="Düzenle" style="padding:3px 5px;border-radius:6px;border:1px solid #1E2A3A;background:transparent;color:#3A4A6A;font-size:10px;cursor:pointer;transition:all 0.2s" onmouseover="this.style.color='#C9A84C'" onmouseout="this.style.color='#3A4A6A'">✎</button>
+            <button onclick="ayiSil('mart')" title="Sil" style="padding:3px 5px;border-radius:6px;border:1px solid #1E2A3A;background:transparent;color:#3A4A6A;font-size:10px;cursor:pointer;transition:all 0.2s" onmouseover="this.style.color='#FF4D6A'" onmouseout="this.style.color='#3A4A6A'">✕</button>
+          </div>
+          <div id="ay-grup-nisan" style="display:flex;align-items:center;gap:2px">
+            <button id="btn-nisan" onclick="switchMonth('nisan')" style="padding:5px 12px;border-radius:20px;border:1px solid rgba(201,168,76,0.5);background:rgba(201,168,76,0.15);color:#C9A84C;font-size:10px;font-weight:700;font-family:var(--font-body);cursor:pointer;letter-spacing:1px;transition:all 0.2s">NİS 26</button>
+            <button onclick="duzenleModu('nisan')" title="Düzenle" style="padding:3px 5px;border-radius:6px;border:1px solid #1E2A3A;background:transparent;color:#3A4A6A;font-size:10px;cursor:pointer;transition:all 0.2s" onmouseover="this.style.color='#C9A84C'" onmouseout="this.style.color='#3A4A6A'">✎</button>
+            <button onclick="ayiSil('nisan')" title="Sil" style="padding:3px 5px;border-radius:6px;border:1px solid #1E2A3A;background:transparent;color:#3A4A6A;font-size:10px;cursor:pointer;transition:all 0.2s" onmouseover="this.style.color='#FF4D6A'" onmouseout="this.style.color='#3A4A6A'">✕</button>
+          </div>
+        </div>
         <button onclick="showYeniAyModal()" title="Yeni ay ekle" style="padding:5px 10px;border-radius:20px;border:1px solid rgba(77,159,255,0.4);background:rgba(77,159,255,0.1);color:#4D9FFF;font-size:13px;font-weight:700;font-family:var(--font-body);cursor:pointer;transition:all 0.2s">+</button>
         <button onclick="saveToJsonBin()" title="Buluta kaydet" style="padding:5px 10px;border-radius:20px;border:1px solid rgba(0,229,160,0.4);background:rgba(0,229,160,0.1);color:#00E5A0;font-size:11px;font-weight:700;font-family:var(--font-body);cursor:pointer;transition:all 0.2s" id="btn-save">💾</button>
         <button onclick="showApiKeyModal()" title="API Ayarları" style="padding:5px 10px;border-radius:20px;border:1px solid rgba(201,168,76,0.3);background:transparent;color:#6B7A99;font-size:11px;font-family:var(--font-body);cursor:pointer;transition:all 0.2s">⚙️</button>
@@ -1169,6 +1183,115 @@ function initModalCharts() {
 
 
 
+
+// Ay grubu oluştur (buton + düzenle + sil)
+function _ayGrupOlustur(key, shortLabel, isActive) {
+  const grp = document.createElement('div');
+  grp.id = 'ay-grup-' + key;
+  grp.style.cssText = 'display:flex;align-items:center;gap:2px';
+  const activeStyle = 'padding:5px 12px;border-radius:20px;border:1px solid rgba(201,168,76,0.5);background:rgba(201,168,76,0.15);color:#C9A84C;font-size:10px;font-weight:700;font-family:var(--font-body);cursor:pointer;letter-spacing:1px;transition:all 0.2s';
+  const inactiveStyle = 'padding:5px 12px;border-radius:20px;border:1px solid #252A3A;background:transparent;color:#6B7A99;font-size:10px;font-weight:700;font-family:var(--font-body);cursor:pointer;letter-spacing:1px;transition:all 0.2s';
+  const iconBase = 'padding:3px 5px;border-radius:6px;border:1px solid #1E2A3A;background:transparent;color:#3A4A6A;font-size:10px;cursor:pointer;transition:all 0.2s';
+  grp.innerHTML = `
+    <button id="btn-${key}" onclick="switchMonth('${key}')" style="${isActive ? activeStyle : inactiveStyle}">${shortLabel}</button>
+    <button onclick="duzenleModu('${key}')" title="Düzenle" style="${iconBase}" onmouseover="this.style.color='#C9A84C'" onmouseout="this.style.color='#3A4A6A'">✎</button>
+    <button onclick="ayiSil('${key}')" title="Sil" style="${iconBase}" onmouseover="this.style.color='#FF4D6A'" onmouseout="this.style.color='#3A4A6A'">✕</button>
+  `;
+  return grp;
+}
+
+// Ay sil
+function ayiSil(key) {
+  const d = AYLAR[key];
+  const label = d ? d.label : key;
+  if (!confirm(label + ' ayını silmek istediğine emin misin?')) return;
+  delete AYLAR[key];
+  const grp = document.getElementById('ay-grup-' + key);
+  if (grp) grp.remove();
+  // Başka bir aya geç
+  const aylar = Object.keys(AYLAR);
+  if (aylar.length > 0) {
+    aktifAy = aylar[aylar.length - 1];
+    switchMonth(aktifAy);
+  }
+  showToast(label + ' silindi. Kaydetmeyi unutma 💾', 'info');
+}
+
+// Düzenleme modu - formu o ayın verileriyle doldur
+function duzenleModu(key) {
+  const d = AYLAR[key];
+  if (!d) return;
+  showYeniAyModal();
+  // Formu doldur
+  document.getElementById('ny_key').value = key;
+  document.getElementById('ny_key').readOnly = true;
+  document.getElementById('ny_key').style.opacity = '0.5';
+  document.getElementById('ny_label').value = d.label || '';
+  document.getElementById('ny_portfoy').value = parseFloat((d.portfoyToplam||'0').replace(/\./g,'').replace(',','.').replace(' ₺','')) || '';
+  document.getElementById('ny_fiziksel').value = parseFloat((d.ekstraKart?.value||'0').replace(/\./g,'').replace(',','.').replace(' ₺','')) || '';
+  document.getElementById('ny_fiziksel_alt').value = d.ekstraKart?.alt || '';
+  document.getElementById('ny_gelir').value = d.gelir || '';
+  document.getElementById('ny_gelir_label').value = d.butceGelirLabel || '';
+
+  // Hisse satırlarını temizle ve doldur
+  const hr = document.getElementById('hisse-rows');
+  while (hr.children.length > 1) hr.removeChild(hr.lastChild);
+  hisseSayac = 0;
+  (d.hisseler || []).forEach(h => {
+    hisseEkle();
+    const i = hisseSayac - 1;
+    document.getElementById('hk-'+i).value = h.kod || '';
+    document.getElementById('hl-'+i).value = h.lot || '';
+    document.getElementById('hd-'+i).value = parseFloat((h.deger||'0').replace(/\./g,'').replace(',','.').replace(' ₺','')) || '';
+    document.getElementById('hp-'+i).value = h.pct || '';
+  });
+
+  // Fon satırlarını temizle ve doldur
+  const fr = document.getElementById('fon-rows');
+  while (fr.children.length > 1) fr.removeChild(fr.lastChild);
+  fonSayac = 0;
+  (d.fonlar || []).forEach(f => {
+    fonEkle();
+    const i = fonSayac - 1;
+    document.getElementById('fk-'+i).value = f.kod || '';
+    document.getElementById('fl-'+i).value = f.lot || '';
+    document.getElementById('fd-'+i).value = parseFloat((f.deger||'0').replace(/\./g,'').replace(',','.').replace(' ₺','')) || '';
+    document.getElementById('fp-'+i).value = f.pct || '';
+  });
+
+  // Gider satırlarını doldur
+  document.getElementById('gider-rows').innerHTML = '';
+  giderSayac = 0;
+  (d.giderLabels || []).forEach((lbl, idx) => {
+    giderEkle();
+    const i = giderSayac - 1;
+    document.getElementById('gl-'+i).value = lbl;
+    document.getElementById('gd-'+i).value = d.giderData?.[idx] || '';
+  });
+
+  // Kaydet butonunu "Güncelle" yap
+  const btn = document.querySelector('#yeniAyModal button[onclick="kaydetYeniAy()"]');
+  if (btn) { btn.textContent = 'Güncelle →'; btn.setAttribute('onclick', 'guncelleMevcut("'+key+'")'); }
+}
+
+// Mevcut ayı güncelle
+function guncelleMevcut(key) {
+  // key input'u tekrar yazılabilir yap
+  document.getElementById('ny_key').readOnly = false;
+  document.getElementById('ny_key').style.opacity = '1';
+  // Geçici olarak o anahtarı sil ki kaydetYeniAy çakışma uyarısı vermesin
+  const backup = AYLAR[key];
+  delete AYLAR[key];
+  // Grubun HTML butonunu da kaldır (kaydetYeniAy yeniden oluşturacak)
+  const grp = document.getElementById('ay-grup-' + key);
+  if (grp) grp.remove();
+  // Kaydet butonunu eski haline getir
+  const btn = document.querySelector('#yeniAyModal button[onclick*="guncelleMevcut"]');
+  if (btn) { btn.textContent = 'Ayı Kaydet ve Ekle →'; btn.setAttribute('onclick', 'kaydetYeniAy()'); }
+  // Şimdi kaydet
+  kaydetYeniAy();
+}
+
 // ===================== YENİ AY FORMU =====================
 const HISSE_RENKLER = [
   {color:'#F87171',bg:'rgba(239,68,68,0.2)'},{color:'#60A5FA',bg:'rgba(59,130,246,0.2)'},
@@ -1355,16 +1478,11 @@ function kaydetYeniAy() {
   };
 
   // Butonu ekle
-  const container = document.querySelector('[id^="btn-subat"]').parentElement;
-  const newBtn = document.createElement('button');
+  const container = document.getElementById('ay-btn-group');
+  const plusBtn = container.querySelector('[onclick="showYeniAyModal()"]') || container.nextElementSibling;
   const shortLabel = label.split(' ')[0].substring(0,3).toUpperCase() + ' ' + (label.split(' ')[1]||'26').slice(-2);
-  newBtn.id = 'btn-' + key;
-  newBtn.textContent = shortLabel;
-  newBtn.onclick = () => switchMonth(key);
-  newBtn.style.cssText = 'padding:5px 12px;border-radius:20px;border:1px solid rgba(201,168,76,0.5);background:rgba(201,168,76,0.15);color:#C9A84C;font-size:10px;font-weight:700;font-family:var(--font-body);cursor:pointer;letter-spacing:1px;transition:all 0.2s';
-  // + butonundan önce ekle
-  const plusBtn = container.querySelector('[onclick="showYeniAyModal()"]');
-  container.insertBefore(newBtn, plusBtn);
+  const wrapper = _ayGrupOlustur(key, shortLabel, true);
+  container.insertBefore(wrapper, plusBtn);
 
   switchMonth(key);
   closeYeniAyModal();
@@ -1444,19 +1562,15 @@ async function loadFromJsonBin() {
     if (data.record && data.record.aylar) {
       Object.assign(AYLAR, data.record.aylar);
       // Yeni ayların butonlarını ekle
-      const container = document.getElementById('btn-subat').parentElement;
+      const container = document.getElementById('ay-btn-group');
       const plusBtn = container.querySelector('[onclick="showYeniAyModal()"]');
       Object.keys(AYLAR).forEach(key => {
         if (!document.getElementById('btn-' + key)) {
           const d = AYLAR[key];
-          const newBtn = document.createElement('button');
           const parts = (d.label || key).split(' ');
           const shortLabel = parts[0].substring(0,3).toUpperCase() + ' ' + (parts[1]||'26').slice(-2);
-          newBtn.id = 'btn-' + key;
-          newBtn.textContent = shortLabel;
-          newBtn.onclick = () => switchMonth(key);
-          newBtn.style.cssText = 'padding:5px 12px;border-radius:20px;border:1px solid #252A3A;background:transparent;color:#6B7A99;font-size:10px;font-weight:700;font-family:var(--font-body);cursor:pointer;letter-spacing:1px;transition:all 0.2s';
-          container.insertBefore(newBtn, plusBtn);
+          const wrapper = _ayGrupOlustur(key, shortLabel, false);
+          container.insertBefore(wrapper, plusBtn);
         }
       });
       const aylar = Object.keys(AYLAR);
