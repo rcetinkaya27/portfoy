@@ -841,6 +841,9 @@
         <button id="btn-subat" onclick="switchMonth('subat')" style="padding:5px 12px;border-radius:20px;border:1px solid #252A3A;background:transparent;color:#6B7A99;font-size:10px;font-weight:700;font-family:var(--font-body);cursor:pointer;letter-spacing:1px;transition:all 0.2s">ŞUB 26</button>
         <button id="btn-mart" onclick="switchMonth('mart')" style="padding:5px 12px;border-radius:20px;border:1px solid #252A3A;background:transparent;color:#6B7A99;font-size:10px;font-weight:700;font-family:var(--font-body);cursor:pointer;letter-spacing:1px;transition:all 0.2s">MAR 26</button>
         <button id="btn-nisan" onclick="switchMonth('nisan')" style="padding:5px 12px;border-radius:20px;border:1px solid rgba(201,168,76,0.5);background:rgba(201,168,76,0.15);color:#C9A84C;font-size:10px;font-weight:700;font-family:var(--font-body);cursor:pointer;letter-spacing:1px;transition:all 0.2s">NİS 26</button>
+        <button onclick="showYeniAyModal()" title="Yeni ay ekle" style="padding:5px 10px;border-radius:20px;border:1px solid rgba(77,159,255,0.4);background:rgba(77,159,255,0.1);color:#4D9FFF;font-size:13px;font-weight:700;font-family:var(--font-body);cursor:pointer;transition:all 0.2s">+</button>
+        <button onclick="saveToJsonBin()" title="Buluta kaydet" style="padding:5px 10px;border-radius:20px;border:1px solid rgba(0,229,160,0.4);background:rgba(0,229,160,0.1);color:#00E5A0;font-size:11px;font-weight:700;font-family:var(--font-body);cursor:pointer;transition:all 0.2s" id="btn-save">💾</button>
+        <button onclick="showApiKeyModal()" title="API Ayarları" style="padding:5px 10px;border-radius:20px;border:1px solid rgba(201,168,76,0.3);background:transparent;color:#6B7A99;font-size:11px;font-family:var(--font-body);cursor:pointer;transition:all 0.2s">⚙️</button>
       </div>
       <button class="modal-close-btn" onclick="closeModal()">✕ Kapat</button>
     </div>
@@ -1164,6 +1167,306 @@ function initModalCharts() {
   });
 }
 
+
+
+// ===================== YENİ AY FORMU =====================
+const HISSE_RENKLER = [
+  {color:'#F87171',bg:'rgba(239,68,68,0.2)'},{color:'#60A5FA',bg:'rgba(59,130,246,0.2)'},
+  {color:'#4ADE80',bg:'rgba(34,197,94,0.2)'},{color:'#FACC15',bg:'rgba(234,179,8,0.2)'},
+  {color:'#C084FC',bg:'rgba(168,85,247,0.2)'},{color:'#9CA3AF',bg:'rgba(156,163,175,0.2)'},
+  {color:'#FB923C',bg:'rgba(249,115,22,0.2)'},{color:'#34D399',bg:'rgba(52,211,153,0.2)'}
+];
+const FON_RENKLER = [
+  {color:'#4D9FFF',bg:'rgba(77,159,255,0.25)'},{color:'#FF6B35',bg:'rgba(255,107,53,0.25)'},
+  {color:'#F87171',bg:'rgba(239,68,68,0.25)'},{color:'#8B7BFF',bg:'rgba(139,123,255,0.25)'},
+  {color:'#00E5A0',bg:'rgba(0,229,160,0.2)'},{color:'#FFB020',bg:'rgba(255,176,32,0.2)'},
+  {color:'#C084FC',bg:'rgba(192,132,252,0.25)'},{color:'#34D399',bg:'rgba(52,211,153,0.2)'}
+];
+
+let hisseSayac = 0, fonSayac = 0, giderSayac = 0;
+
+function inputRow(id, cols) {
+  return `<div style="display:grid;grid-template-columns:${cols};gap:6px;margin-bottom:6px;align-items:center">${arguments[2]}</div>`;
+}
+
+function hisseEkle() {
+  const i = hisseSayac++;
+  const div = document.createElement('div');
+  div.style.cssText = 'display:grid;grid-template-columns:80px 1fr 100px 80px 28px;gap:6px;margin-bottom:6px;align-items:center';
+  div.id = 'hr-' + i;
+  div.innerHTML = `
+    <input placeholder="TUPRS" style="${inp()}" id="hk-${i}"/>
+    <input placeholder="13 Lot" style="${inp()}" id="hl-${i}"/>
+    <input type="number" placeholder="3497" style="${inp()}" id="hd-${i}"/>
+    <input placeholder="%23.4" style="${inp()}" id="hp-${i}"/>
+    <button onclick="document.getElementById('hr-${i}').remove()" style="background:rgba(255,77,106,0.15);border:1px solid rgba(255,77,106,0.3);color:#FF4D6A;border-radius:6px;cursor:pointer;font-size:12px;padding:0;width:28px;height:34px">✕</button>
+  `;
+  document.getElementById('hisse-rows').appendChild(div);
+}
+
+function fonEkle() {
+  const i = fonSayac++;
+  const div = document.createElement('div');
+  div.style.cssText = 'display:grid;grid-template-columns:80px 1fr 100px 80px 28px;gap:6px;margin-bottom:6px;align-items:center';
+  div.id = 'fr-' + i;
+  div.innerHTML = `
+    <input placeholder="TP2" style="${inp()}" id="fk-${i}"/>
+    <input placeholder="Midas" style="${inp()}" id="fl-${i}"/>
+    <input type="number" placeholder="11677" style="${inp()}" id="fd-${i}"/>
+    <input placeholder="%39.4" style="${inp()}" id="fp-${i}"/>
+    <button onclick="document.getElementById('fr-${i}').remove()" style="background:rgba(255,77,106,0.15);border:1px solid rgba(255,77,106,0.3);color:#FF4D6A;border-radius:6px;cursor:pointer;font-size:12px;padding:0;width:28px;height:34px">✕</button>
+  `;
+  document.getElementById('fon-rows').appendChild(div);
+}
+
+function giderEkle() {
+  const i = giderSayac++;
+  const div = document.createElement('div');
+  div.style.cssText = 'display:grid;grid-template-columns:1fr 100px 28px;gap:6px;margin-bottom:6px;align-items:center';
+  div.id = 'gr-' + i;
+  div.innerHTML = `
+    <input placeholder="QNB" style="${inp()}" id="gl-${i}"/>
+    <input type="number" placeholder="10000" style="${inp()}" id="gd-${i}"/>
+    <button onclick="document.getElementById('gr-${i}').remove()" style="background:rgba(255,77,106,0.15);border:1px solid rgba(255,77,106,0.3);color:#FF4D6A;border-radius:6px;cursor:pointer;font-size:12px;padding:0;width:28px;height:34px">✕</button>
+  `;
+  document.getElementById('gider-rows').appendChild(div);
+}
+
+function inp() {
+  return 'width:100%;padding:8px 10px;background:#141B26;border:1px solid #1E2A3A;border-radius:8px;color:#EEF2F8;font-family:var(--font-body);font-size:12px;outline:none;box-sizing:border-box';
+}
+
+function showYeniAyModal() {
+  // Reset
+  hisseSayac = 0; fonSayac = 0; giderSayac = 0;
+  ['ny_key','ny_label','ny_portfoy','ny_fiziksel','ny_fiziksel_alt','ny_gelir','ny_gelir_label'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+  // Sadece başlık satırlarını bırak
+  const hr = document.getElementById('hisse-rows');
+  while (hr.children.length > 1) hr.removeChild(hr.lastChild);
+  const fr = document.getElementById('fon-rows');
+  while (fr.children.length > 1) fr.removeChild(fr.lastChild);
+  document.getElementById('gider-rows').innerHTML = '';
+  document.getElementById('ny_hata').style.display = 'none';
+  
+  // Varsayılan satırlar ekle
+  for(let i=0;i<6;i++) hisseEkle();
+  for(let i=0;i<6;i++) fonEkle();
+  for(let i=0;i<8;i++) giderEkle();
+  
+  document.getElementById('yeniAyModal').style.display = 'flex';
+}
+
+function closeYeniAyModal() {
+  document.getElementById('yeniAyModal').style.display = 'none';
+}
+
+function kaydetYeniAy() {
+  const key = document.getElementById('ny_key').value.trim().toLowerCase()
+    .replace(/ş/g,'s').replace(/ç/g,'c').replace(/ı/g,'i').replace(/ğ/g,'g').replace(/ü/g,'u').replace(/ö/g,'o');
+  const label = document.getElementById('ny_label').value.trim();
+  const portfoyToplam = parseFloat(document.getElementById('ny_portfoy').value) || 0;
+  const fiziksel = parseFloat(document.getElementById('ny_fiziksel').value) || 0;
+  const fizikselAlt = document.getElementById('ny_fiziksel_alt').value.trim() || '10g Altın + 166g Gümüş';
+  const gelir = parseFloat(document.getElementById('ny_gelir').value) || 0;
+  const gelirLabel = document.getElementById('ny_gelir_label').value.trim() || 'Maaş + Kira';
+
+  const hata = document.getElementById('ny_hata');
+  if (!key || !label) {
+    hata.textContent = 'Ay anahtarı ve etiket zorunlu!';
+    hata.style.display = 'block'; return;
+  }
+  if (AYLAR[key]) {
+    hata.textContent = '"' + key + '" zaten mevcut!';
+    hata.style.display = 'block'; return;
+  }
+
+  // Hisseler
+  const hisseler = [];
+  for (let i = 0; i < hisseSayac; i++) {
+    const k = document.getElementById('hk-'+i);
+    if (!k || !k.closest('#hisse-rows') || !k.value.trim()) continue;
+    const dVal = parseFloat(document.getElementById('hd-'+i).value) || 0;
+    const r = HISSE_RENKLER[hisseler.length % HISSE_RENKLER.length];
+    hisseler.push({
+      kod: k.value.trim().toUpperCase(),
+      lot: document.getElementById('hl-'+i).value.trim() || '-',
+      deger: dVal.toLocaleString('tr-TR') + ' ₺',
+      pct: document.getElementById('hp-'+i).value.trim() || '-',
+      color: r.color, bg: r.bg
+    });
+  }
+
+  // Fonlar
+  const fonlar = [];
+  for (let i = 0; i < fonSayac; i++) {
+    const k = document.getElementById('fk-'+i);
+    if (!k || !k.closest('#fon-rows') || !k.value.trim()) continue;
+    const dVal = parseFloat(document.getElementById('fd-'+i).value) || 0;
+    const r = FON_RENKLER[fonlar.length % FON_RENKLER.length];
+    fonlar.push({
+      kod: k.value.trim().toUpperCase(),
+      lot: document.getElementById('fl-'+i).value.trim() || '-',
+      deger: dVal.toLocaleString('tr-TR') + ' ₺',
+      pct: document.getElementById('fp-'+i).value.trim() || '-',
+      color: r.color, bg: r.bg
+    });
+  }
+
+  // Giderler
+  const giderLabels = [], giderData = [];
+  for (let i = 0; i < giderSayac; i++) {
+    const l = document.getElementById('gl-'+i);
+    if (!l || !l.closest('#gider-rows') || !l.value.trim()) continue;
+    giderLabels.push(l.value.trim());
+    giderData.push(parseFloat(document.getElementById('gd-'+i).value) || 0);
+  }
+  const gider = giderData.reduce((a,b) => a+b, 0);
+  const bakiye = gelir - gider;
+
+  const hisseToplam = hisseler.reduce((a,h) => a + parseFloat(h.deger.replace(/\./g,'').replace(',','.').replace(' ₺','')), 0);
+  const fonToplam = fonlar.reduce((a,f) => a + parseFloat(f.deger.replace(/\./g,'').replace(',','.').replace(' ₺','')), 0);
+
+  AYLAR[key] = {
+    label,
+    portfoyToplam: portfoyToplam.toLocaleString('tr-TR') + ' ₺',
+    portfoyAlt: 'Hisseler + Fonlar + Fiziki',
+    varlikSayisi: String(hisseler.length + fonlar.length),
+    hisseToplam: Math.round(hisseToplam).toLocaleString('tr-TR') + ' ₺',
+    hisseAlt: hisseler.length + ' hisse · ' + hisseler.slice(0,3).map(h=>h.kod).join(', ') + '…',
+    fonToplam: Math.round(fonToplam).toLocaleString('tr-TR') + ' ₺',
+    fonAlt: fonlar.length + ' fon · ' + fonlar.slice(0,4).map(f=>f.kod).join(', '),
+    ekstraKart: { label:'Fiziksel Varlık', value: fiziksel.toLocaleString('tr-TR') + ' ₺', alt: fizikselAlt },
+    hisseler, fonlar,
+    fonBaslik: 'Yatırım Fonları',
+    portfoyPie: {
+      labels: ['Hisse Senetleri','Yatırım Fonları','Fiziksel'],
+      data: [Math.round(hisseToplam), Math.round(fonToplam), Math.round(fiziksel)]
+    },
+    hissePie: {
+      labels: hisseler.map(h=>h.kod),
+      data: hisseler.map(h => parseFloat(h.deger.replace(/\./g,'').replace(',','.').replace(' ₺','')))
+    },
+    gelir, gider, bakiye,
+    butceGelirLabel: gelirLabel,
+    giderLabels, giderData
+  };
+
+  // Butonu ekle
+  const container = document.querySelector('[id^="btn-subat"]').parentElement;
+  const newBtn = document.createElement('button');
+  const shortLabel = label.split(' ')[0].substring(0,3).toUpperCase() + ' ' + (label.split(' ')[1]||'26').slice(-2);
+  newBtn.id = 'btn-' + key;
+  newBtn.textContent = shortLabel;
+  newBtn.onclick = () => switchMonth(key);
+  newBtn.style.cssText = 'padding:5px 12px;border-radius:20px;border:1px solid rgba(201,168,76,0.5);background:rgba(201,168,76,0.15);color:#C9A84C;font-size:10px;font-weight:700;font-family:var(--font-body);cursor:pointer;letter-spacing:1px;transition:all 0.2s';
+  // + butonundan önce ekle
+  const plusBtn = container.querySelector('[onclick="showYeniAyModal()"]');
+  container.insertBefore(newBtn, plusBtn);
+
+  switchMonth(key);
+  closeYeniAyModal();
+  showToast(label + ' eklendi! Kaydetmeyi unutma 💾', 'success');
+}
+// ===================== YENİ AY FORMU SON =====================
+
+// ===================== JSONBin ENTEGRASYONU =====================
+const JSONBIN_BASE = 'https://api.jsonbin.io/v3';
+let BIN_ID = localStorage.getItem('portfoy_bin_id') || '';
+let API_KEY = localStorage.getItem('portfoy_api_key') || '';
+
+function showApiKeyModal() {
+  document.getElementById('apiKeyModal').style.display = 'flex';
+  document.getElementById('apiKeyInput').value = localStorage.getItem('portfoy_api_key') || '';
+}
+function closeApiKeyModal() {
+  document.getElementById('apiKeyModal').style.display = 'none';
+}
+async function saveApiKey() {
+  const key = document.getElementById('apiKeyInput').value.trim();
+  if (!key) return;
+  API_KEY = key;
+  localStorage.setItem('portfoy_api_key', key);
+  closeApiKeyModal();
+  showToast('API Key kaydedildi ✓', 'success');
+  if (!BIN_ID) await createBin();
+}
+
+async function createBin() {
+  try {
+    showToast('Bin oluşturuluyor...', 'info');
+    const res = await fetch(JSONBIN_BASE + '/b', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-Master-Key': API_KEY, 'X-Bin-Name': 'portfoy-data' },
+      body: JSON.stringify({ aylar: AYLAR })
+    });
+    const data = await res.json();
+    if (data.metadata && data.metadata.id) {
+      BIN_ID = data.metadata.id;
+      localStorage.setItem('portfoy_bin_id', BIN_ID);
+      showToast('Bin oluşturuldu ve kaydedildi ✓', 'success');
+    } else {
+      showToast('Bin oluşturulamadı', 'error');
+    }
+  } catch(e) { showToast('Hata: ' + e.message, 'error'); }
+}
+
+async function saveToJsonBin() {
+  if (!API_KEY) { showApiKeyModal(); return; }
+  if (!BIN_ID) { await createBin(); return; }
+  try {
+    const btn = document.getElementById('btn-save');
+    if (btn) btn.textContent = '⏳';
+    const res = await fetch(JSONBIN_BASE + '/b/' + BIN_ID, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', 'X-Master-Key': API_KEY },
+      body: JSON.stringify({ aylar: AYLAR })
+    });
+    const data = await res.json();
+    if (btn) btn.textContent = '💾';
+    if (data.record) showToast('Kaydedildi ✓', 'success');
+    else showToast('Kayıt hatası', 'error');
+  } catch(e) {
+    document.getElementById('btn-save').textContent = '💾';
+    showToast('Hata: ' + e.message, 'error');
+  }
+}
+
+async function loadFromJsonBin() {
+  if (!API_KEY || !BIN_ID) return;
+  try {
+    const res = await fetch(JSONBIN_BASE + '/b/' + BIN_ID + '/latest', {
+      headers: { 'X-Master-Key': API_KEY }
+    });
+    const data = await res.json();
+    if (data.record && data.record.aylar) {
+      Object.assign(AYLAR, data.record.aylar);
+      renderAy(aktifAy);
+      showToast('Veriler yüklendi ✓', 'success');
+    }
+  } catch(e) {}
+}
+
+function showToast(msg, type) {
+  let t = document.getElementById('toast-msg');
+  if (!t) {
+    t = document.createElement('div');
+    t.id = 'toast-msg';
+    t.style.cssText = 'position:fixed;bottom:30px;left:50%;transform:translateX(-50%);padding:10px 22px;border-radius:30px;font-size:13px;font-family:var(--font-body);font-weight:600;z-index:99999;transition:opacity 0.4s;pointer-events:none;letter-spacing:0.5px';
+    document.body.appendChild(t);
+  }
+  const c = {success:'#00E5A0',error:'#FF4D6A',info:'#C9A84C'};
+  const b = {success:'rgba(0,229,160,0.15)',error:'rgba(255,77,106,0.15)',info:'rgba(201,168,76,0.15)'};
+  t.textContent = msg; t.style.color = c[type]; t.style.background = b[type];
+  t.style.border = `1px solid ${c[type]}`; t.style.opacity = '1';
+  clearTimeout(t._t); t._t = setTimeout(() => t.style.opacity='0', 2500);
+}
+
+window.addEventListener('load', () => { if (API_KEY && BIN_ID) loadFromJsonBin(); });
+// ===================== JSONBin ENTEGRASYONU SON =====================
+
 // CURSOR
 const cursor = document.getElementById('cursor');
 const ring = document.getElementById('cursorRing');
@@ -1223,5 +1526,92 @@ function handleSubmit(e) {
   }, 3000);
 }
 </script>
+
+
+<!-- YENİ AY MODAL -->
+<div id="yeniAyModal" style="display:none;position:fixed;inset:0;z-index:99997;background:rgba(6,8,16,0.95);backdrop-filter:blur(10px);align-items:flex-start;justify-content:center;overflow-y:auto;padding:20px 0">
+  <div style="background:#0D1117;border:1px solid #1E2A3A;border-radius:20px;padding:32px;max-width:640px;width:94%;margin:auto;box-shadow:0 20px 60px rgba(0,0,0,0.6)">
+    
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px">
+      <h3 style="font-family:var(--font-display);font-size:22px;color:#C9A84C">Yeni Ay Ekle</h3>
+      <button onclick="closeYeniAyModal()" style="background:transparent;border:1px solid #252A3A;color:#6B7A99;border-radius:8px;padding:6px 12px;cursor:pointer;font-family:var(--font-body);font-size:12px">✕ Kapat</button>
+    </div>
+
+    <!-- GENEL BİLGİ -->
+    <div style="margin-bottom:20px">
+      <div style="color:#4D9FFF;font-size:11px;letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;border-bottom:1px solid #1E2A3A;padding-bottom:8px">📅 Genel Bilgi</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div><label style="color:#6B7A99;font-size:11px;display:block;margin-bottom:4px">Ay Anahtarı (ör: mayis)</label><input id="ny_key" placeholder="mayis" style="width:100%;padding:9px 12px;background:#141B26;border:1px solid #1E2A3A;border-radius:8px;color:#EEF2F8;font-family:var(--font-body);font-size:13px;outline:none;box-sizing:border-box"/></div>
+        <div><label style="color:#6B7A99;font-size:11px;display:block;margin-bottom:4px">Etiket (ör: Mayıs 2026)</label><input id="ny_label" placeholder="Mayıs 2026" style="width:100%;padding:9px 12px;background:#141B26;border:1px solid #1E2A3A;border-radius:8px;color:#EEF2F8;font-family:var(--font-body);font-size:13px;outline:none;box-sizing:border-box"/></div>
+        <div><label style="color:#6B7A99;font-size:11px;display:block;margin-bottom:4px">Portföy Toplamı (₺)</label><input id="ny_portfoy" type="number" placeholder="131214" style="width:100%;padding:9px 12px;background:#141B26;border:1px solid #1E2A3A;border-radius:8px;color:#EEF2F8;font-family:var(--font-body);font-size:13px;outline:none;box-sizing:border-box"/></div>
+        <div><label style="color:#6B7A99;font-size:11px;display:block;margin-bottom:4px">Fiziksel Varlık (₺)</label><input id="ny_fiziksel" type="number" placeholder="86606" style="width:100%;padding:9px 12px;background:#141B26;border:1px solid #1E2A3A;border-radius:8px;color:#EEF2F8;font-family:var(--font-body);font-size:13px;outline:none;box-sizing:border-box"/></div>
+        <div><label style="color:#6B7A99;font-size:11px;display:block;margin-bottom:4px">Fiziksel Açıklama</label><input id="ny_fiziksel_alt" placeholder="10g Altın + 166g Gümüş" style="width:100%;padding:9px 12px;background:#141B26;border:1px solid #1E2A3A;border-radius:8px;color:#EEF2F8;font-family:var(--font-body);font-size:13px;outline:none;box-sizing:border-box"/></div>
+      </div>
+    </div>
+
+    <!-- HİSSELER -->
+    <div style="margin-bottom:20px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;border-bottom:1px solid #1E2A3A;padding-bottom:8px">
+        <span style="color:#4ADE80;font-size:11px;letter-spacing:2px;text-transform:uppercase">📈 Hisseler</span>
+        <button onclick="hisseEkle()" style="padding:4px 10px;background:rgba(74,222,128,0.1);border:1px solid rgba(74,222,128,0.3);color:#4ADE80;border-radius:6px;cursor:pointer;font-size:11px;font-family:var(--font-body)">+ Ekle</button>
+      </div>
+      <div id="hisse-rows">
+        <div style="display:grid;grid-template-columns:80px 1fr 100px 80px;gap:6px;margin-bottom:6px;opacity:0.5">
+          <span style="color:#6B7A99;font-size:10px;padding:0 4px">KOD</span>
+          <span style="color:#6B7A99;font-size:10px;padding:0 4px">LOT</span>
+          <span style="color:#6B7A99;font-size:10px;padding:0 4px">DEĞER (₺)</span>
+          <span style="color:#6B7A99;font-size:10px;padding:0 4px">%</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- FONLAR -->
+    <div style="margin-bottom:20px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;border-bottom:1px solid #1E2A3A;padding-bottom:8px">
+        <span style="color:#A78BFA;font-size:11px;letter-spacing:2px;text-transform:uppercase">💼 Fonlar</span>
+        <button onclick="fonEkle()" style="padding:4px 10px;background:rgba(167,139,250,0.1);border:1px solid rgba(167,139,250,0.3);color:#A78BFA;border-radius:6px;cursor:pointer;font-size:11px;font-family:var(--font-body)">+ Ekle</button>
+      </div>
+      <div id="fon-rows">
+        <div style="display:grid;grid-template-columns:80px 1fr 100px 80px;gap:6px;margin-bottom:6px;opacity:0.5">
+          <span style="color:#6B7A99;font-size:10px;padding:0 4px">KOD</span>
+          <span style="color:#6B7A99;font-size:10px;padding:0 4px">KURUM</span>
+          <span style="color:#6B7A99;font-size:10px;padding:0 4px">DEĞER (₺)</span>
+          <span style="color:#6B7A99;font-size:10px;padding:0 4px">%</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- BÜTÇE -->
+    <div style="margin-bottom:24px">
+      <div style="color:#FFB020;font-size:11px;letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;border-bottom:1px solid #1E2A3A;padding-bottom:8px">💰 Bütçe</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
+        <div><label style="color:#6B7A99;font-size:11px;display:block;margin-bottom:4px">Gelir (₺)</label><input id="ny_gelir" type="number" placeholder="65640" style="width:100%;padding:9px 12px;background:#141B26;border:1px solid #1E2A3A;border-radius:8px;color:#EEF2F8;font-family:var(--font-body);font-size:13px;outline:none;box-sizing:border-box"/></div>
+        <div><label style="color:#6B7A99;font-size:11px;display:block;margin-bottom:4px">Gelir Kaynağı</label><input id="ny_gelir_label" placeholder="Maaş + Kira" style="width:100%;padding:9px 12px;background:#141B26;border:1px solid #1E2A3A;border-radius:8px;color:#EEF2F8;font-family:var(--font-body);font-size:13px;outline:none;box-sizing:border-box"/></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+        <span style="color:#FF4D6A;font-size:11px;letter-spacing:1px;text-transform:uppercase">Gider Kalemleri</span>
+        <button onclick="giderEkle()" style="padding:4px 10px;background:rgba(255,77,106,0.1);border:1px solid rgba(255,77,106,0.3);color:#FF4D6A;border-radius:6px;cursor:pointer;font-size:11px;font-family:var(--font-body)">+ Ekle</button>
+      </div>
+      <div id="gider-rows"></div>
+    </div>
+
+    <button onclick="kaydetYeniAy()" style="width:100%;padding:14px;background:linear-gradient(135deg,#C9A84C,#8B6914);color:#060810;border:none;border-radius:12px;font-family:var(--font-body);font-size:14px;font-weight:700;cursor:pointer;letter-spacing:1px">Ayı Kaydet ve Ekle →</button>
+    <p id="ny_hata" style="color:#FF4D6A;font-size:12px;text-align:center;margin-top:10px;display:none"></p>
+  </div>
+</div>
+
+<!-- API KEY MODAL -->
+<div id="apiKeyModal" style="display:none;position:fixed;inset:0;z-index:99998;background:rgba(6,8,16,0.92);backdrop-filter:blur(10px);align-items:center;justify-content:center">
+  <div style="background:#0D1117;border:1px solid #1E2A3A;border-radius:20px;padding:36px;max-width:420px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,0.6)">
+    <h3 style="font-family:var(--font-display);font-size:20px;color:#C9A84C;margin-bottom:8px">JSONBin Ayarları</h3>
+    <p style="color:#6B7A99;font-size:13px;margin-bottom:24px;line-height:1.6">jsonbin.io → API Keys → Master Key'inizi girin. Bir kez kaydedilir, tekrar sorulmaz.</p>
+    <input id="apiKeyInput" type="password" placeholder="$2a$10$..." style="width:100%;padding:12px 16px;background:#141B26;border:1px solid #1E2A3A;border-radius:10px;color:#EEF2F8;font-family:var(--font-body);font-size:13px;outline:none;margin-bottom:16px;box-sizing:border-box" />
+    <div style="display:flex;gap:10px">
+      <button onclick="saveApiKey()" style="flex:1;padding:12px;background:linear-gradient(135deg,#C9A84C,#8B6914);color:#060810;border:none;border-radius:10px;font-family:var(--font-body);font-size:13px;font-weight:700;cursor:pointer;letter-spacing:1px">Kaydet</button>
+      <button onclick="closeApiKeyModal()" style="padding:12px 20px;background:transparent;color:#6B7A99;border:1px solid #252A3A;border-radius:10px;font-family:var(--font-body);font-size:13px;cursor:pointer">İptal</button>
+    </div>
+    <p style="color:#3A4A6A;font-size:11px;margin-top:14px;text-align:center">Key yalnızca tarayıcınızda saklanır</p>
+  </div>
+</div>
 </body>
 </html>
