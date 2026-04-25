@@ -752,9 +752,8 @@
         <span class="project-tag">Chart.js</span>
         <span class="project-tag">Fintech</span>
       </div>
-    
+    </div>
 
-        
     <div class="project-card reveal">
       <div class="project-icon">🌐</div>
       <div class="project-name">Portföy Web Sitesi</div>
@@ -839,8 +838,9 @@
       </div>
       <div style="display:flex;gap:8px;align-items:center">
         <span style="font-size:10px;color:#6B7A99;letter-spacing:1px;text-transform:uppercase">Dönem:</span>
-        <button id="btn-subat" onclick="switchMonth('subat')" style="padding:5px 12px;border-radius:20px;border:1px solid #C9A84C;background:rgba(201,168,76,0.25);color:#fff;font-size:10px;font-weight:700;font-family:var(--font-body);cursor:pointer;letter-spacing:1px;transition:all 0.2s">ŞUB 26</button>
-        <button id="btn-mart" onclick="switchMonth('mart')" style="padding:5px 12px;border-radius:20px;border:1px solid #EEF2F8;background:transparent;color:#EEF2F8;font-size:10px;font-weight:700;font-family:var(--font-body);cursor:pointer;letter-spacing:1px;transition:all 0.2s">MAR 26</button>
+        <button id="btn-subat" onclick="switchMonth('subat')" style="padding:5px 12px;border-radius:20px;border:1px solid #252A3A;background:transparent;color:#6B7A99;font-size:10px;font-weight:700;font-family:var(--font-body);cursor:pointer;letter-spacing:1px;transition:all 0.2s">ŞUB 26</button>
+        <button id="btn-mart" onclick="switchMonth('mart')" style="padding:5px 12px;border-radius:20px;border:1px solid #252A3A;background:transparent;color:#6B7A99;font-size:10px;font-weight:700;font-family:var(--font-body);cursor:pointer;letter-spacing:1px;transition:all 0.2s">MAR 26</button>
+        <button id="btn-nisan" onclick="switchMonth('nisan')" style="padding:5px 12px;border-radius:20px;border:1px solid rgba(201,168,76,0.5);background:rgba(201,168,76,0.15);color:#C9A84C;font-size:10px;font-weight:700;font-family:var(--font-body);cursor:pointer;letter-spacing:1px;transition:all 0.2s">NİS 26</button>
       </div>
       <button class="modal-close-btn" onclick="closeModal()">✕ Kapat</button>
     </div>
@@ -991,15 +991,47 @@ const AYLAR = {
     butceGelirLabel: 'Maaş + TI1 + Kira',
     giderLabels:['QNB','MİDAS','TOKİ','Kira','FON','AKBANK','ONBANK','Eğlence'],
     giderData:[18165,15000,10500,10000,5000,4982,4085,3150],
+  },
+  nisan: {
+    label: 'Nisan 2026',
+    portfoyToplam: '131.214 ₺',
+    portfoyAlt: 'Hisseler + Fonlar + Fiziki',
+    varlikSayisi: '13',
+    hisseToplam: '14.951 ₺', hisseAlt: '6 hisse · TUPRS, DOAS, MGROS…',
+    fonToplam: '29.657 ₺', fonAlt: '6 fon · TP2, PHE, PSE, PRY, KHA, HKH',
+    ekstraKart: { label: 'Fiziksel Varlık', value: '86.606 ₺', alt: '10g Altın + 166g Gümüş' },
+    hisseler: [
+      { kod:'TUPRS', lot:'13 Lot', deger:'3.497 ₺', pct:'%23.4', color:'#F87171', bg:'rgba(239,68,68,0.2)' },
+      { kod:'DOAS', lot:'13 Lot', deger:'2.580 ₺', pct:'%17.3', color:'#60A5FA', bg:'rgba(59,130,246,0.2)' },
+      { kod:'MGROS', lot:'4 Lot', deger:'2.554 ₺', pct:'%17.1', color:'#4ADE80', bg:'rgba(34,197,94,0.2)' },
+      { kod:'ENKAI', lot:'22 Lot', deger:'2.343 ₺', pct:'%15.7', color:'#FACC15', bg:'rgba(234,179,8,0.2)' },
+      { kod:'AKSA', lot:'165 Lot', deger:'2.305 ₺', pct:'%15.4', color:'#C084FC', bg:'rgba(168,85,247,0.2)' },
+      { kod:'FROTO', lot:'15 Lot', deger:'1.672 ₺', pct:'%11.2', color:'#9CA3AF', bg:'rgba(156,163,175,0.2)' },
+    ],
+    fonlar: [
+      { kod:'TP2', lot:'Midas', deger:'11.677 ₺', pct:'%39.4', color:'#4D9FFF', bg:'rgba(77,159,255,0.25)' },
+      { kod:'PHE', lot:'Midas', deger:'5.728 ₺', pct:'%19.3', color:'#FF6B35', bg:'rgba(255,107,53,0.25)' },
+      { kod:'KHA', lot:'1.346 Lot · İş B.', deger:'4.563 ₺', pct:'%15.4', color:'#F87171', bg:'rgba(239,68,68,0.25)' },
+      { kod:'HKH', lot:'457 Lot · İş B.', deger:'3.871 ₺', pct:'%13.1', color:'#8B7BFF', bg:'rgba(139,123,255,0.25)' },
+      { kod:'PSE', lot:'Midas · Sigorta', deger:'2.110 ₺', pct:'%7.1', color:'#00E5A0', bg:'rgba(0,229,160,0.2)' },
+      { kod:'PRY', lot:'Midas', deger:'1.708 ₺', pct:'%5.8', color:'#FFB020', bg:'rgba(255,176,32,0.2)' },
+    ],
+    fonBaslik: 'Yatırım Fonları',
+    portfoyPie: { labels:['Hisse Senetleri','Yatırım Fonları','Fiziksel'], data:[14951,29657,86606] },
+    hissePie: { labels:['TUPRS','DOAS','MGROS','ENKAI','AKSA','FROTO'], data:[3497,2580,2554,2343,2305,1672] },
+    gelir: 65640, gider: 65638, bakiye: 2,
+    butceGelirLabel: 'Maaş + Kira',
+    giderLabels:['ONBANK EK','QNB','TOKİ','Kira','AKBANK','Midas','ONBANK Kr.','Çiçek','FON','DASK','Yetim V.','Kişisel'],
+    giderData:[10000,10000,10138,10000,7835,6340,3600,2500,2000,1450,900,875],
   }
 };
 
-let aktifAy = 'subat';
+let aktifAy = 'nisan';
 let portfoyChart, hisseChart, barChart, giderChart;
 
 function switchMonth(ay) {
   aktifAy = ay;
-  ['subat','mart'].forEach(a => {
+  ['subat','mart','nisan'].forEach(a => {
     const btn = document.getElementById('btn-' + a);
     if (a === ay) {
       btn.style.background = 'rgba(201,168,76,0.15)';
